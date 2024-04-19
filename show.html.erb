@@ -1,0 +1,25 @@
+<%= render 'layouts/navclient' %>
+<div class="container mt-5">
+  <h1 class="display-4"><%= @category.name %></h1>
+
+  <h2>Products</h2>
+  <div class="row">
+    <% @products.each do |product| %>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <% if product.image.attached? %>
+            <%= image_tag product.image, class: 'card-img-top' %>
+          <% else %>
+            <p class="text-center">No Image</p>
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title"><%= product.name %></h5>
+            <p class="card-text"><%= truncate(product.description, length: 100) %></p>
+            <%= link_to 'View Product', product_path(product), class: 'btn btn-primary btn-block' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
