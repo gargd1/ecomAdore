@@ -1,34 +1,58 @@
-
-
 <div class="container">
-  <%= form_with(model: [:admin, category], local: true) do |form| %>
-    <% if category.errors.any? %>
+  <%= form_with model: [:admin, @product], local: true do |form| %>
+    <% if @product.errors.any? %>
       <div class="alert alert-danger">
-        <h2><%= pluralize(category.errors.count, "error") %> prohibited this category from being saved:</h2>
+        <h2><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h2>
         <ul>
-          <% category.errors.full_messages.each do |message| %>
+          <% @product.errors.full_messages.each do |message| %>
             <li><%= message %></li>
           <% end %>
         </ul>
       </div>
     <% end %>
 
-    <div class="row">
+    <div class="form-row">
       <div class="col-md-6">
         <div class="form-group">
-          <%= form.label :name %>
-          <%= form.text_field :name, class: 'form-control', id: :category_name, required: true %>
+          <%= form.label :name, class: 'control-label' %>
+          <%= form.text_field :name, class: 'form-control', required: true %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :description, class: 'control-label' %>
+          <%= form.text_area :description, class: 'form-control', required: true %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :price, class: 'control-label' %>
+          <%= form.number_field :price, class: 'form-control', required: true %>
+        </div>
+
+        <div class="form-group">
+          <% if @product.image.attached? %>
+            <%= image_tag @product.image, class: 'img-thumbnail mb-3' %>
+          <% end %>
+          <%= form.label :image, class: 'control-label' %>
+          <%= form.file_field :image, class: 'form-control-file' %>
         </div>
       </div>
+      <div class="form-group">
+      <%= form.label :sale, class: 'control-label' %>
+      <%= form.check_box :sale, class: 'form-check-input' %>
+      <%= label :sale, 'On Sale', class: 'form-check-label' %>
+    </div>
 
       <div class="col-md-6">
-        <!-- If you have other fields or information for categories, they can go here -->
+        <div class="form-group">
+          <%= form.label :categories, class: 'control-label' %><br>
+          <%= form.collection_select :category_ids, Category.all, :id, :name, {}, { class: 'form-control', multiple: true, required: true } %>
+        </div>
       </div>
     </div>
 
     <div class="form-group">
-      <%= form.submit class: 'btn btn-primary' %>
-      <%= link_to 'Back', admin_categories_path, class: 'btn btn-secondary' %>
+      <%= form.submit 'Save', class: 'btn btn-lg btn-primary' %>
+      <%= link_to 'Back', admin_products_path, class: 'btn btn-lg btn-secondary' %>
     </div>
   <% end %>
 </div>
