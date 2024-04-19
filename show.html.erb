@@ -1,25 +1,41 @@
 <%= render 'layouts/navclient' %>
 <div class="container mt-5">
-  <h1 class="display-4"><%= @category.name %></h1>
-
-  <h2>Products</h2>
   <div class="row">
-    <% @products.each do |product| %>
-      <div class="col-md-4 mb-4">
-        <div class="card h-100">
-          <% if product.image.attached? %>
-            <%= image_tag product.image, class: 'card-img-top' %>
-          <% else %>
-            <p class="text-center">No Image</p>
-          <% end %>
-          <div class="card-body">
-            <h5 class="card-title"><%= product.name %></h5>
-            <p class="card-text"><%= truncate(product.description, length: 100) %></p>
-            <%= link_to 'View Product', product_path(product), class: 'btn btn-primary btn-block' %>
+    <div class="col-md-9">
+      <% if @product.image.attached? %>
+        <%= image_tag @product.image, class: 'img-fluid product-image' %>
+      <% else %>
+        <p class="text-center">No Image Available</p>
+      <% end %>
+    </div>
+
+    <div class="col-md-3">
+      <h1><%= @product.name %></h1>
+      <p><%= @product.description %></p>
+      <h3 class="text-muted">$<%= @product.price %></h3>
+      
+      <%= form_with url: add_to_cart_path(@product.id), method: :post, local: true do |f| %>
+        <% if @sizes.present? %>
+          <div class="form-group">
+            <%= f.label :size_id, 'Size' %>
+            <%= f.select :size_id, options_from_collection_for_select(@sizes, 'id', 'size'), include_blank: 'Select Size', class: 'form-control' %>
           </div>
+        <% end %>
+        
+        <% if @colors.present? %>
+          <div class="form-group">
+            <%= f.label :color_id, 'Color' %>
+            <%= f.select :color_id, options_from_collection_for_select(@colors, 'id', 'color'), include_blank: 'Select Color', class: 'form-control' %>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= f.label :quantity, 'Quantity' %>
+          <%= f.number_field :quantity, in: 1..99, step: 1, value: 1, class: 'form-control' %>
         </div>
-      </div>
-    <% end %>
+        
+        <%= f.submit "Add to Cart", class: "btn btn-primary" %>
+      <% end %>
+    </div>
   </div>
 </div>
-

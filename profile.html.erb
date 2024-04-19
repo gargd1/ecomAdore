@@ -1,0 +1,54 @@
+<%= render 'layouts/navclient' %>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card border-0 shadow">
+        <div class="card-header bg-secondary text-white">
+          <h2 class="mb-0">Profile</h2>
+          
+        </div>
+       
+        
+        <div class="card-body">
+          <!-- Details -->
+          <h3 class="card-title">Details</h3>
+          <div class="mb-3">
+            <label class="text-muted">Email:</label>
+            <div><%= @user.email %></div>
+          </div>
+          <div class="mb-3">
+            <label class="text-muted">Name:</label>
+            <div><%= @user.name %></div>
+          </div>
+          
+          <div class="mb-3">
+            <label class="text-muted">Phone Number:</label>
+            <div><%= @user.phone_number %></div>
+          </div>
+          <%= form_for(@user, url: user_profile_update_path, method: :put) do |f| %>
+            <div class="mb-3">
+              <%= f.label :address, class: "text-muted" %>
+              <%= f.text_field :address, class: 'form-control' %>
+            </div>
+            <div class="mb-3">
+              <%= f.label :province_id, "Province", class: "text-muted" %>
+              <%= f.collection_select :province_id, Province.all, :id, :name, { include_blank: true }, { class: 'form-control' } %>
+            </div>
+            <div class="text-end">
+              <%= f.submit "Update Profile", class: 'btn btn-primary' %>
+            </div>
+          <% end %>
+          <% flash.each do |type, message| %>
+            <div class="container mt-4">
+              <div class="alert " role="alert">
+                <%= message %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        </div>
+       
+      </div>
+    </div>
+  </div>
+</div>
